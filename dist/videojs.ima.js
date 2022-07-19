@@ -1153,7 +1153,7 @@ AdUi.prototype.setShowCountdown = function (showCountdownIn) {
 };
 
 var name = "videojs-ima";
-var version = "2.0.1";
+var version = "1.11.0";
 var license = "Apache-2.0";
 var main = "./dist/videojs.ima.js";
 var module$1 = "./dist/videojs.ima.es.js";
@@ -1393,18 +1393,16 @@ SdkImpl.prototype.requestAds = function () {
   }
 
   if (this.controller.getSettings().omidMode) {
-    adsRequest.omidAccessModeRules = {};
-    const omidValues = this.controller.getSettings().omidMode;
+    window.console.warn('The additional setting `omidMode` has been removed. ' + 'Use `omidVendorAccess` instead.');
+  }
 
-    if (omidValues.FULL) {
-      adsRequest.omidAccessModeRules[google.ima.OmidAccessMode.FULL] = omidValues.FULL;
-    }
-    if (omidValues.DOMAIN) {
-      adsRequest.omidAccessModeRules[google.ima.OmidAccessMode.DOMAIN] = omidValues.DOMAIN;
-    }
-    if (omidValues.LIMITED) {
-      adsRequest.omidAccessModeRules[google.ima.OmidAccessMode.LIMITED] = omidValues.LIMITED;
-    }
+  if (this.controller.getSettings().omidVendorAccess) {
+    adsRequest.omidAccessModeRules = {};
+    const omidVendorValues = this.controller.getSettings().omidVendorAccess;
+
+    Object.keys(omidVendorValues).forEach(vendorKey => {
+      adsRequest.omidAccessModeRules[vendorKey] = omidVendorValues[vendorKey];
+    });
   }
 
   adsRequest.linearAdSlotWidth = this.controller.getPlayerWidth();
